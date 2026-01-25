@@ -1,0 +1,10 @@
+[project]
+name = "marimo-1ere-explo-duckdb"
+version = "0.1.0"
+description = "Apprendre l'exploration de données avec DuckDB & Marimo 🦆 sur les commandes d'un hypermarché 🛒"
+readme = "README.md"
+authors = ["Antoine Giraud", "Dylan Cailler"]
+requires-python = ">=3.13"
+dependencies = [
+    "marimo[sql]>=0.19.6",
+]
