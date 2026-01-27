@@ -16,7 +16,7 @@ Lancez un codespace Github
 
 Une fois connecté, effectuez
 -  `uv sync` pour être sur d'avoir les dépendances python à jour
--  `marimo edit .\marimo_hypermarche.py` pour lancer l'app Marimo & débuter le TD
+-  `uv run marimo edit marimo_hypermarche.py` pour lancer l'app Marimo & débuter le TD
 
 ### Installation locale
 
@@ -47,4 +47,4 @@ Une fois connecté, effectuez
 
 #### Lancer le projet marimo
 
-- `marimo edit .\marimo_hypermarche.py`
+- `marimo edit marimo_hypermarche.py`
