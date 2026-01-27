@@ -6,6 +6,8 @@ avec en entrée un **excel de commandes** qq peu fouilli "comme on les aime"
 
 👉 Certaines cellules contiennent des `TODO` à compléter.
 
+![hypermarche_flux_donnees](https://raw.githubusercontent.com/AntoineGiraud/dbt_hypermarche/main/images/hypermarche_flux_donnees.png)
+
 ![capture_marimo_xp_dev](./capture_marimo_xp_dev.png)
 
 ### Usage immédiat via codespaces
