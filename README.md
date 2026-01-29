@@ -6,6 +6,8 @@ avec en entrée un **excel de commandes** qq peu fouilli "comme on les aime"
 
 👉 Certaines cellules contiennent des `TODO` à compléter.
 
+![hypermarche_flux_donnees](https://raw.githubusercontent.com/AntoineGiraud/dbt_hypermarche/main/images/hypermarche_flux_donnees.png)
+
 ![capture_marimo_xp_dev](./capture_marimo_xp_dev.png)
 
 ### Usage immédiat via codespaces
@@ -16,7 +18,7 @@ Lancez un codespace Github
 
 Une fois connecté, effectuez
 -  `uv sync` pour être sur d'avoir les dépendances python à jour
--  `marimo edit .\marimo_hypermarche.py` pour lancer l'app Marimo & débuter le TD
+-  `uv run marimo edit marimo_hypermarche.py` pour lancer l'app Marimo & débuter le TD
 
 ### Installation locale
 
@@ -47,4 +49,4 @@ Une fois connecté, effectuez
 
 #### Lancer le projet marimo
 
-- `marimo edit .\marimo_hypermarche.py`
+- `marimo edit marimo_hypermarche.py`
