@@ -6,8 +6,8 @@ app = marimo.App(width="medium")
 
 @app.cell
 def _():
-    import marimo as mo
     import duckdb
+    import marimo as mo
 
     # Create a DuckDB connection
     conn = duckdb.connect("explo_hypermarche.db")
@@ -40,13 +40,13 @@ def _(mo):
 @app.cell
 def _(conn, mo):
     _df = mo.sql(
-        f"""
+        """
         -- on prépare tout de suite les couches de rafinement de nos données
         create schema if not exists raw; --> données brutes (tel quel)
         create schema if not exists stg; --> tables & colonnes renommées & typées (base de données & compréhension friendly)
         create schema if not exists dtm; --> tables de dimension & faits préparées, prêtes pour analyse
         """,
-        engine=conn
+        engine=conn,
     )
     return
 
@@ -62,8 +62,8 @@ def _(mo):
 
 @app.cell
 def _():
-    url_hypermarche = 'https://github.com/AntoineGiraud/dbt_hypermarche/raw/refs/heads/main/input/Hypermarche.xlsx'
-    url_hypermarche = 'data/Hypermarche.xlsx'
+    url_hypermarche = "https://github.com/AntoineGiraud/dbt_hypermarche/raw/refs/heads/main/input/Hypermarche.xlsx"
+    url_hypermarche = "data/Hypermarche.xlsx"
     # url distante ou locale qu'importe DuckDB s'en arrangera :)
     return (url_hypermarche,)
 
@@ -83,7 +83,7 @@ def _(conn, mo, url_hypermarche):
 
         --> puissance de marimo en action : f string python {url_hypermarche}
         """,
-        engine=conn
+        engine=conn,
     )
     return
 
@@ -105,11 +105,11 @@ def _(mo):
 @app.cell
 def _(conn, mo):
     _df = mo.sql(
-        f"""
+        """
         -- retourne QUE infos du "schéma" de la base de données
         describe raw.raw_achats;
         """,
-        engine=conn
+        engine=conn,
     )
     return
 
@@ -117,11 +117,11 @@ def _(conn, mo):
 @app.cell
 def _(conn, mo):
     _df = mo.sql(
-        f"""
+        """
         -- summarize fait en plus un p'tit récap min/max/moy/count/count distinct
         summarize raw.raw_achats;
         """,
-        engine=conn
+        engine=conn,
     )
     return
 
@@ -129,11 +129,11 @@ def _(conn, mo):
 @app.cell
 def _(conn, mo):
     _df = mo.sql(
-        f"""
+        """
         -- huum, l'onglet personne a l'être d'être lié à la zone géo de la ville de la commande
         summarize raw.raw_personnes
         """,
-        engine=conn
+        engine=conn,
     )
     return
 
@@ -141,11 +141,11 @@ def _(conn, mo):
 @app.cell
 def _(conn, mo):
     _df = mo.sql(
-        f"""
+        """
         -- ok, telle commande a été retournée, mais le 'Oui' c'est pas très BDD friendly !
         summarize raw.raw_retours
         """,
-        engine=conn
+        engine=conn,
     )
     return
 
@@ -171,7 +171,7 @@ def _(mo):
 @app.cell
 def _(conn, mo):
     _df = mo.sql(
-        f"""
+        """
         -- responsables des zones géographiques
         create or replace table stg.stg_zone_has_responsable as
         select
@@ -182,7 +182,7 @@ def _(conn, mo):
         -- affichons les données
         from stg.stg_zone_has_responsable
         """,
-        engine=conn
+        engine=conn,
     )
     return
 
@@ -190,7 +190,7 @@ def _(conn, mo):
 @app.cell
 def _(conn, mo):
     _df = mo.sql(
-        f"""
+        """
         -- table des retours 🧪
         create or replace table stg.stg_retour_commande as
         select
@@ -198,12 +198,12 @@ def _(conn, mo):
         	replace("Retourné", 'Oui', 1)::int est_retourne
         from raw.raw_retours
         ;
-        -- corriger l'erreur de la requête 
+        -- corriger l'erreur de la requête
 
         -- affichons les données
         from stg.stg_retour_commande
         """,
-        engine=conn
+        engine=conn,
     )
     return
 
@@ -211,8 +211,8 @@ def _(conn, mo):
 @app.cell
 def _(conn, mo):
     _df = mo.sql(
-        f"""
-        -- table des commandes 
+        """
+        -- table des commandes
         select
             -- petite démo de fonctions DuckDB sympas
             * replace (
@@ -222,7 +222,7 @@ def _(conn, mo):
             -- MAIS 🧪 ... on ne va pas aller loin ainsi pour tout bien renommer & typer
         from raw.raw_achats
         """,
-        engine=conn
+        engine=conn,
     )
     return
 
@@ -230,7 +230,7 @@ def _(conn, mo):
 @app.cell
 def _(conn, mo):
     _df = mo.sql(
-        f"""
+        """
         create or replace table stg.stg_commande as
         select
             "ID ligne" id_ligne,
@@ -256,7 +256,7 @@ def _(conn, mo):
         from
             raw.raw_achats;
         """,
-        engine=conn
+        engine=conn,
     )
     return
 
@@ -418,15 +418,15 @@ def _(mo):
 @app.cell
 def _(conn, mo):
     _df = mo.sql(
-        f"""
-        create or replace table dtm.dim_client as 
-        select 
-            id_client, 
-            client_nom as nom, 
+        """
+        create or replace table dtm.dim_client as
+        select
+            id_client,
+            client_nom as nom,
             client_segment as segment
         from stg.stg_commande
         """,
-        engine=conn
+        engine=conn,
     )
     return
 
@@ -444,16 +444,16 @@ def _(mo):
 @app.cell
 def _(conn, mo):
     _df = mo.sql(
-        f"""
+        """
         -- avons nous des doublons dans la dim_client ?!!
         /*
         select
         from
-        group by 
+        group by
         having
         */
         """,
-        engine=conn
+        engine=conn,
     )
     return
 
@@ -471,12 +471,12 @@ def _(mo):
 @app.cell
 def _(conn, mo):
     _df = mo.sql(
-        f"""
+        """
         /*
-        create or replace table dtm.dim_client as 
+        create or replace table dtm.dim_client as
         */
         """,
-        engine=conn
+        engine=conn,
     )
     return
 
@@ -500,7 +500,7 @@ def _(mo):
 @app.cell
 def _(conn, mo):
     _df = mo.sql(
-        f"""
+        """
         create or replace table dtm.dim_produit as
         select
             id_produit,
@@ -509,7 +509,7 @@ def _(conn, mo):
             produit_nom as nom
         from stg.stg_commande
         """,
-        engine=conn
+        engine=conn,
     )
     return
 
@@ -527,16 +527,16 @@ def _(mo):
 @app.cell
 def _(conn, mo):
     _df = mo.sql(
-        f"""
+        """
         -- avons nous des doublons dans la dim_produit ?!!
         /*
         select
         from
-        group by 
+        group by
         having
         */
         """,
-        engine=conn
+        engine=conn,
     )
     return
 
@@ -554,12 +554,12 @@ def _(mo):
 @app.cell
 def _(conn, mo):
     _df = mo.sql(
-        f"""
+        """
         /*
-        create or replace table dtm.dim_produit as 
+        create or replace table dtm.dim_produit as
         */
         """,
-        engine=conn
+        engine=conn,
     )
     return
 
@@ -595,10 +595,10 @@ def _(mo):
 @app.cell
 def _(conn, mo):
     _df = mo.sql(
-        f"""
+        """
         from dtm.dim_produit
         """,
-        engine=conn
+        engine=conn,
     )
     return
 
@@ -606,7 +606,7 @@ def _(conn, mo):
 @app.cell
 def _(conn, mo):
     _df = mo.sql(
-        f"""
+        """
         /*
         faire une CTE avec les données produit de stg_commande sans doublon
 
@@ -615,7 +615,7 @@ def _(conn, mo):
         exemple :
 
         with data_source as (
-        select 
+        select
         	*
         from stg.stg_commande
         )select
@@ -624,7 +624,7 @@ def _(conn, mo):
 
         */
         """,
-        engine=conn
+        engine=conn,
     )
     return
 
@@ -662,10 +662,10 @@ def _(mo):
 @app.cell
 def _(conn, mo):
     _df = mo.sql(
-        f"""
+        """
         create or replace table dtm.dim_ville as
         """,
-        engine=conn
+        engine=conn,
     )
     return
 
@@ -683,16 +683,16 @@ def _(mo):
 @app.cell
 def _(conn, mo):
     _df = mo.sql(
-        f"""
+        """
         -- avons nous des doublons dans la dim_ville ?!!
         /*
         select
         from
-        group by 
+        group by
         having
         */
         """,
-        engine=conn
+        engine=conn,
     )
     return
 
@@ -710,12 +710,12 @@ def _(mo):
 @app.cell
 def _(conn, mo):
     _df = mo.sql(
-        f"""
+        """
         /*
         create or replace table dtm.dim_ville
         */
         """,
-        engine=conn
+        engine=conn,
     )
     return
 
@@ -765,13 +765,13 @@ def _(mo):
 @app.cell
 def _(conn, mo):
     _df = mo.sql(
-        f"""
+        """
         /*
-        Attention ou doublon garder l'idée de la CTE 
+        Attention ou doublon garder l'idée de la CTE
         */
-        create or replace table dtm.fct_commande as 
+        create or replace table dtm.fct_commande as
         """,
-        engine=conn
+        engine=conn,
     )
     return
 
@@ -808,10 +808,10 @@ def _(mo):
 @app.cell
 def _(conn, mo):
     _df = mo.sql(
-        f"""
-        create or replace table dtm.fct_commande as 
+        """
+        create or replace table dtm.fct_commande as
         """,
-        engine=conn
+        engine=conn,
     )
     return
 
